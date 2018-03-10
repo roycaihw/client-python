@@ -86,7 +86,7 @@ class V1EnvFromSource(object):
     def prefix(self):
         """
         Gets the prefix of this V1EnvFromSource.
-        An optional identifer to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.
+        An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.
 
         :return: The prefix of this V1EnvFromSource.
         :rtype: str
@@ -97,7 +97,7 @@ class V1EnvFromSource(object):
     def prefix(self, prefix):
         """
         Sets the prefix of this V1EnvFromSource.
-        An optional identifer to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.
+        An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.
 
         :param prefix: The prefix of this V1EnvFromSource.
         :type: str

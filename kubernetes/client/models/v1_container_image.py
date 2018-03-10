@@ -57,7 +57,7 @@ class V1ContainerImage(object):
     def names(self):
         """
         Gets the names of this V1ContainerImage.
-        Names by which this image is known. e.g. [\"gcr.io/google_containers/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]
+        Names by which this image is known. e.g. [\"k8s.gcr.io/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]
 
         :return: The names of this V1ContainerImage.
         :rtype: list[str]
@@ -68,7 +68,7 @@ class V1ContainerImage(object):
     def names(self, names):
         """
         Sets the names of this V1ContainerImage.
-        Names by which this image is known. e.g. [\"gcr.io/google_containers/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]
+        Names by which this image is known. e.g. [\"k8s.gcr.io/hyperkube:v1.0.7\", \"dockerhub.io/google_containers/hyperkube:v1.0.7\"]
 
         :param names: The names of this V1ContainerImage.
         :type: list[str]

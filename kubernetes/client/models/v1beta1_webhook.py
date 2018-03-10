@@ -167,7 +167,7 @@ class V1beta1Webhook(object):
     def rules(self):
         """
         Gets the rules of this V1beta1Webhook.
-        Rules describes what operations on what resources/subresources the webhook cares about. The webhook cares about an operation if it matches _any_ Rule.
+        Rules describes what operations on what resources/subresources the webhook cares about. The webhook cares about an operation if it matches _any_ Rule. However, in order to prevent ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks from putting the cluster in a state which cannot be recovered from without completely disabling the plugin, ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks are never called on admission requests for ValidatingWebhookConfiguration and MutatingWebhookConfiguration objects.
 
         :return: The rules of this V1beta1Webhook.
         :rtype: list[V1beta1RuleWithOperations]
@@ -178,7 +178,7 @@ class V1beta1Webhook(object):
     def rules(self, rules):
         """
         Sets the rules of this V1beta1Webhook.
-        Rules describes what operations on what resources/subresources the webhook cares about. The webhook cares about an operation if it matches _any_ Rule.
+        Rules describes what operations on what resources/subresources the webhook cares about. The webhook cares about an operation if it matches _any_ Rule. However, in order to prevent ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks from putting the cluster in a state which cannot be recovered from without completely disabling the plugin, ValidatingAdmissionWebhooks and MutatingAdmissionWebhooks are never called on admission requests for ValidatingWebhookConfiguration and MutatingWebhookConfiguration objects.
 
         :param rules: The rules of this V1beta1Webhook.
         :type: list[V1beta1RuleWithOperations]

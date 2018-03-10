@@ -61,7 +61,8 @@ class V1Endpoints(object):
           self.kind = kind
         if metadata is not None:
           self.metadata = metadata
-        self.subsets = subsets
+        if subsets is not None:
+          self.subsets = subsets
 
     @property
     def api_version(self):
@@ -152,8 +153,6 @@ class V1Endpoints(object):
         :param subsets: The subsets of this V1Endpoints.
         :type: list[V1EndpointSubset]
         """
-        if subsets is None:
-            raise ValueError("Invalid value for `subsets`, must not be `None`")
 
         self._subsets = subsets
 

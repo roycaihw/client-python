@@ -86,7 +86,7 @@ class V1EventSeries(object):
     def last_observed_time(self):
         """
         Gets the last_observed_time of this V1EventSeries.
-        Time of the last occurence observed
+        Time of the last occurrence observed
 
         :return: The last_observed_time of this V1EventSeries.
         :rtype: datetime
@@ -97,7 +97,7 @@ class V1EventSeries(object):
     def last_observed_time(self, last_observed_time):
         """
         Sets the last_observed_time of this V1EventSeries.
-        Time of the last occurence observed
+        Time of the last occurrence observed
 
         :param last_observed_time: The last_observed_time of this V1EventSeries.
         :type: datetime
