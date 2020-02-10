@@ -1,3 +1,5 @@
+test
+
 # v11.0.0b2
 **Bug Fix:**
 - Fix a fatal bug in package setup [kubernetes-client/python#1011](https://github.com/kubernetes-client/python/pull/1011)
