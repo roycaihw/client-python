@@ -437,12 +437,26 @@ class TestClient(unittest.TestCase):
         client = api_client.ApiClient(configuration=self.config)
         api = core_v1_api.CoreV1Api(client)
 
+        # prepare test namespace
+        ns_name = 'test-ns-' + short_uuid()
+        test_ns = {
+            "kind": "Namespace",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": ns_name,
+            },
+        }
+        resp = api.create_namespace(
+            body=test_ns)
+        self.assertEqual(ns_name, resp.metadata.name)
+
         name = 'test-configmap-' + short_uuid()
         test_configmap = {
             "kind": "ConfigMap",
             "apiVersion": "v1",
             "metadata": {
                 "name": name,
+                "namespace": ns_name,
             },
             "data": {
                 "config.json": "{\"command\":\"/usr/bin/mysqld_safe\"}",
@@ -451,23 +465,26 @@ class TestClient(unittest.TestCase):
         }
 
         resp = api.create_namespaced_config_map(
-            body=test_configmap, namespace='default'
+            body=test_configmap, namespace=test_ns
         )
         self.assertEqual(name, resp.metadata.name)
 
         resp = api.read_namespaced_config_map(
-            name=name, namespace='default')
+            name=name, namespace=test_ns)
         self.assertEqual(name, resp.metadata.name)
 
         test_configmap['data']['config.json'] = "{}"
         resp = api.patch_namespaced_config_map(
-            name=name, namespace='default', body=test_configmap)
+            name=name, namespace=test_ns, body=test_configmap)
 
         resp = api.delete_namespaced_config_map(
-            name=name, body={}, namespace='default')
+            name=name, body={}, namespace=test_ns)
 
-        resp = api.list_namespaced_config_map('default', pretty=True)
+        resp = api.list_namespaced_config_map(test_ns, pretty=True)
         self.assertEqual([], resp.items)
+
+        # clean up test namespace
+        api.delete_namespace(name=test_ns)
 
     def test_node_apis(self):
         client = api_client.ApiClient(configuration=self.config)

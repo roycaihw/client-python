@@ -26,12 +26,13 @@ def short_uuid():
     return id[-12:]
 
 
-def config_map_with_value(name, value):
+def config_map_with_value(name, namespace, value):
     return {
         "apiVersion": "v1",
         "kind": "ConfigMap",
         "metadata": {
             "name": name,
+            "namespace": namespace,
         },
         "data": {
             "key": value,
@@ -50,30 +51,43 @@ class TestClient(unittest.TestCase):
         client = api_client.ApiClient(configuration=self.config)
         api = core_v1_api.CoreV1Api(client)
 
+        # prepare test namespace
+        ns_name = 'test-ns-' + short_uuid()
+        test_ns = {
+            "kind": "Namespace",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": ns_name,
+            },
+        }
+        resp = api.create_namespace(
+            body=test_ns)
+        self.assertEqual(ns_name, resp.metadata.name)
+
         # create a configmap
         name_a = 'configmap-a-' + short_uuid()
-        configmap_a = config_map_with_value(name_a, "a")
+        configmap_a = config_map_with_value(name_a, ns_name, "a")
         api.create_namespaced_config_map(
-            body=configmap_a, namespace='default')
+            body=configmap_a, namespace=ns_name)
 
         # list all configmaps and extract the resource version
-        resp = api.list_namespaced_config_map('default')
+        resp = api.list_namespaced_config_map(ns_name)
         rv = resp.metadata.resource_version
 
         # create another configmap
         name_b = 'configmap-b-' + short_uuid()
-        configmap_b = config_map_with_value(name_b, "b")
+        configmap_b = config_map_with_value(name_b, ns_name, "b")
         api.create_namespaced_config_map(
-            body=configmap_b, namespace='default')
+            body=configmap_b, namespace=ns_name)
 
         # patch configmap b
         configmap_b['data']['config'] = "{}"
         api.patch_namespaced_config_map(
-            name=name_b, namespace='default', body=configmap_b)
+            name=name_b, namespace=ns_name, body=configmap_b)
 
         # delete all configmaps
         api.delete_collection_namespaced_config_map(
-            namespace='default')
+            namespace=ns_name)
 
         w = watch.Watch()
         # expect to observe all events happened after the initial LIST
@@ -81,7 +95,7 @@ class TestClient(unittest.TestCase):
         i = 0
         # start watching with the resource version we got from the LIST
         for event in w.stream(api.list_namespaced_config_map,
-                              namespace='default',
+                              namespace=ns_name,
                               resource_version=rv,
                               timeout_seconds=5):
             self.assertEqual(event['type'], expect[i])
@@ -92,3 +106,6 @@ class TestClient(unittest.TestCase):
             i = i + 1
 
         self.assertEqual(i, 4)
+
+        # clean up test namespace
+        api.delete_namespace(name=test_ns)
